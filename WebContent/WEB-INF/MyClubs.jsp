@@ -44,7 +44,7 @@
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -95,7 +95,7 @@
 		
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">
@@ -121,7 +121,7 @@
   <div class="tab-pane fade p-3" role="tabpanel" id="Ajout">
   <c:if test="${empty clubs_membre}">
 	<center>
-	<h5>Pas de clubs géres.</h5>
+	<h5>Vous ne faites partie d'aucun club.</h5>
 	</center>
   </c:if>
   <c:forEach var = "club" items = "${clubs_membre}">
@@ -148,7 +148,7 @@
   		</div>
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">

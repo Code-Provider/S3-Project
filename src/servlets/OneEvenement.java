@@ -1,14 +1,17 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bdd.Everything;
+import beans.Eleve;
 import beans.Evenement;
 
 /**
@@ -32,8 +35,12 @@ public class OneEvenement extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Everything ev = new Everything() ; 
-		Evenement evenement = ev.getEvenement(Integer.parseInt(request.getParameter("evenement_id"))) ; 
+		HttpSession session = request.getSession() ; 
+		int id = (int)session.getAttribute("id") ; 
+		Evenement evenement = ev.getEvenement(Integer.parseInt(request.getParameter("evenement_id")), id) ; 
+		List<Eleve> inscrits = ev.getElevesInscris(evenement.getId()) ; 
 		request.setAttribute("evenement", evenement);
+		request.setAttribute("eleves", inscrits) ; 
 		this.getServletContext().getRequestDispatcher("/WEB-INF/Evenement.jsp").forward(request, response);
 	}
 

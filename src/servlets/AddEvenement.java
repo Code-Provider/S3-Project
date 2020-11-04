@@ -47,6 +47,8 @@ public class AddEvenement extends HttpServlet {
 		String lol1 = request.getParameter("datefin") ;
 		String lol2 = lol.replace("T", " ") ; 
 		String lol3 = lol1.replace("T", " ") ; 
+		System.out.println(lol2) ; 
+		System.out.println(lol3) ; 
 		String image = request.getParameter("image") ; 
 		//String image2 = image.substring(image.lastIndexOf("\\"));  
 		//image2.trim(); 

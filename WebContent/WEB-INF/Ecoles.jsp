@@ -44,7 +44,7 @@
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -82,7 +82,7 @@
   
   <c:forEach var = "ecole" items = "${deck}">
   <div class="card" style="width: 12rem;">
-  <img src="${ecole.image}" class="card-img-top" alt="...">
+  <img src="Im/${ecole.image}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">${ecole.nom}</h5>
     <p class="card-text">${ecole.description}
@@ -119,7 +119,7 @@
   </div>
   <div class="form-group">
   <label for="image">Image</label>
-    <input type="text" class="form-control" id="image" name = "image" placeholder="Entrez l'URL de l'image (225x200)">
+    <input type="file" class="form-control-file" id="image" name = "image">
   </div>
   </div>
 

@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<img src = "emi.jpg">
+<img src = "Im/emi.jpg">
 
 </body>
 </html>

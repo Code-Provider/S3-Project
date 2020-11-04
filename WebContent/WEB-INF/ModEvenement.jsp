@@ -43,7 +43,7 @@
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -78,7 +78,7 @@
   </div>
   <div class="form-group">
   <label for="Activites">Activités</label>
-    <textarea class="form-control" id="activites" name = "activites" value = "${evenement.activites}" placeholder="Veuiller détailler les différentes activités de l'événement"></textarea>
+    <textarea class="form-control" id="activites" name = "activites"  placeholder="Veuiller détailler les différentes activités de l'événement">${evenement.activites}</textarea>
     
   </div>
   <div class="form-group row">

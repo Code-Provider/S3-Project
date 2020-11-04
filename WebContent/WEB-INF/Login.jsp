@@ -15,7 +15,7 @@
 <div class = "container p-5">
 <ul class="nav nav-tabs" role = "tablist">
   <li class="nav-item">
-    <a class="nav-link" href="#login" data-toggle = "tab" role = "tab" aria-controls="login">Se connecter</a>
+    <a class="nav-link active" href="#login" data-toggle = "tab" role = "tab" aria-controls="login">Se connecter</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="#signup" data-toggle = "tab" role = "tab" aria-controls="signup">S'enregister</a>
@@ -23,14 +23,13 @@
   </ul>
 
 <div class="tab-content">
-  <div class="tab-pane fade show active p-3" role="tabpanel" >
-  <h5 class = "text-center">Veuiller vous connecter ou vous enregistrer !</h5>
-  <br/>
-  <c:if test = "${!empty param.Error}">
-  <small>${param.Error}</small>
-  </c:if>
+
+  <div class="tab-pane fade p-3 show active" id="login" aria-labelledby="login-tab" role="tabpanel">
+  <c:if test = "${not empty Error}">
+  <div class="alert alert-danger" role="alert">
+  ${Error}
   </div>
-  <div class="tab-pane fade p-3" id="login" aria-labelledby="login-tab" role="tabpanel">
+  </c:if>
   <form method = "POST" action = "Login">
   <div class="form-group">
     <label for="login">Login</label>

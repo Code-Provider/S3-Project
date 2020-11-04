@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bdd.Everything;
 import beans.Evenement;
@@ -32,7 +33,9 @@ public class ModEvenement extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Everything ev = new Everything() ; 
-		Evenement evenement = ev.getEvenement(Integer.parseInt(request.getParameter("evenement_id"))) ;
+		HttpSession session = request.getSession() ; 
+		int id = (int)session.getAttribute("id") ; 
+		Evenement evenement = ev.getEvenement(Integer.parseInt(request.getParameter("evenement_id")), id) ;
 		evenement.setDateDebut1(evenement.getDateDebut1().replace(" ", "T"));
 		evenement.setDateFin1(evenement.getDateFin1().replace(" ", "T"));
 		request.setAttribute("evenement", evenement);

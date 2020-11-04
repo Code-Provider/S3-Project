@@ -29,7 +29,7 @@ public class Everything {
 		}
 		
 		try {
-			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projets3?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "thesteameuse") ;
+			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projets3?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root") ;
 		}
 		catch(SQLException e) {
 			System.out.println(e) ; 
@@ -84,7 +84,7 @@ public class Everything {
 			
 			statement = connexion.createStatement() ; 
 			result = statement.executeQuery("SELECT id, nom, ecole FROM ELEVE WHERE login = '" + eleve.getLogin()
-			+ "' and password = '" + eleve.getPassword() + "' ;"  );
+			+ "' and password = '" + eleve.getPassword() + "' and validite = 'unban' ;"  );
 
 			
 			if(result.next()){
@@ -256,7 +256,8 @@ public List<Club> getClubs(){
 				eleve.setNom(result.getString("nom")) ; 
 				eleve.setEcole(result.getString("ecole")) ; 
 				eleve.setEmail(result.getString("email"));
-				
+				eleve.setTelephone(result.getString("telephone"));
+				eleve.setValidite(result.getString("validite"));
 			}
 		}catch(SQLException e) {
 				System.out.println(e) ; 
@@ -558,7 +559,7 @@ public List<Club> getClubs(){
 			while(result.next()) {
 				Eleve eleve = new Eleve() ; 
 				eleve = getEleveById(result.getInt("eleve_id")) ; 
-				String abc = new SimpleDateFormat("yyyy/MM/dd").format(result.getTimestamp("date")) ; 
+				String abc = new SimpleDateFormat("dd/MM/yyyy").format(result.getTimestamp("date")) ; 
 				eleve.setDate(abc);
 				eleves.add(eleve) ; 
 			}
@@ -693,7 +694,7 @@ public List<Club> getClubs(){
 			result = statement.executeQuery("SELECT id, content, eleve_id, eleve_nom, date from message where club_id = " + club_id +   " order by date desc;");
 			while(result.next()) {
 				Message message = new Message() ; 
-				String abc = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(result.getTimestamp("date")) ; 
+				String abc = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(result.getTimestamp("date")) ; 
 				message.setDate(abc);
 				message.setId(result.getInt("id"));
 				message.setContent(result.getString("content"));
@@ -753,7 +754,7 @@ public List<Club> getClubs(){
 				result = statement.executeQuery("SELECT content, eleve_id, eleve_nom, date from reponse where message_id = " + message.getId() +   ";");
 				while(result.next()) {
 					Message reponse = new Message() ; 
-					String abc = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(result.getTimestamp("date")) ; 
+					String abc = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(result.getTimestamp("date")) ; 
 					reponse.setDate(abc);
 					reponse.setContent(result.getString("content"));
 					reponse.setEleve_nom(result.getString("eleve_nom"));
@@ -906,8 +907,8 @@ public List<Club> getClubs(){
 					evenement.setTitre(result.getString("titre"));
 					evenement.setDescription(result.getString("description"));
 					evenement.setImage(result.getString("image"));
-					String abcd = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datedebut")) ;
-					String abcd2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datefin")) ;
+					String abcd = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datedebut")) ;
+					String abcd2 = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datefin")) ;
 					evenement.setDateDebut(abcd);
 					evenement.setDateFin(abcd2);
 					evenement.setType(result.getString("type"));
@@ -959,7 +960,7 @@ public List<Club> getClubs(){
 		
 	}
 	
-	public Evenement getEvenement(int evenement_id) {
+	public Evenement getEvenement(int evenement_id, int eleve_id) {
 		loadDatabase() ; 
 		Ecoles ec = new Ecoles(); 
 
@@ -980,10 +981,10 @@ public List<Club> getClubs(){
 					evenement.setDescription(result.getString("description"));
 					evenement.setImage(result.getString("image"));
 					evenement.setActivites(result.getString("activite"));
-					String abc = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(result.getTimestamp("datedebut")) ; 
-					String abc2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(result.getTimestamp("datefin")) ; 
-					String abcd = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datedebut")) ;
-					String abcd2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datefin")) ;
+					String abc = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(result.getTimestamp("datedebut")) ; 
+					String abc2 = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(result.getTimestamp("datefin")) ; 
+					String abcd = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datedebut")) ;
+					String abcd2 = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datefin")) ;
 					evenement.setDateDebut1(abc);
 					evenement.setDateFin1(abc2);
 					evenement.setDateDebut(abcd);
@@ -991,6 +992,19 @@ public List<Club> getClubs(){
 					evenement.setType(result.getString("type"));
 					evenement.setEcole(ec.getEcole(result.getInt("ecole_id"))) ; 
 					evenement.setClub(getClub(result.getInt("club_id")));
+					evenement.setValue(false);
+					IsInscris(eleve_id, evenement) ;
+					
+					List<Eleve> membres = getMembres(result.getInt("club_id")) ;
+					
+					if (eleve_id == evenement.getClub().getGerant().getId()) {
+						evenement.setValue(true);
+					}
+					for(Eleve e : membres) {
+						if(eleve_id == e.getId()) {
+							evenement.setValue(true);
+						}
+					}
 				
 			}
 		}catch(SQLException e) {
@@ -1043,23 +1057,23 @@ public List<Club> getClubs(){
 			result = statement.executeQuery("SELECT * FROM evenement where (type = 'Public' or ecole_id = "+ ecole_id + ") and datefin > '" + date + "' order by datedebut asc ;");
 			while(result.next()) {
 					Evenement evenement = new Evenement();
-					evenement.setValue(true);
+					evenement.setValue(false);
 					Club club =  getClub(result.getInt("club_id")) ;
 					Eleve gerant = club.getGerant() ; 
 					List<Eleve> membres = getMembres(result.getInt("club_id")) ;
 					if (eleve_id == gerant.getId()) {
-						evenement.setValue(false);
+						evenement.setValue(true);
 					}
 					for(Eleve e : membres) {
 						if(eleve_id == e.getId()) {
-							evenement.setValue(false);
+							evenement.setValue(true);
 						}
 					}
 					
-					String abc = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(result.getTimestamp("datedebut")) ; 
-					String abc2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(result.getTimestamp("datefin")) ; 
-					String abcd = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datedebut")) ;
-					String abcd2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datefin")) ;
+					String abc = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(result.getTimestamp("datedebut")) ; 
+					String abc2 = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(result.getTimestamp("datefin")) ; 
+					String abcd = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datedebut")) ;
+					String abcd2 = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datefin")) ;
 					evenement.setId(result.getInt("id"));
 					evenement.setTitre(result.getString("titre"));
 					evenement.setDescription(result.getString("description"));
@@ -1203,15 +1217,16 @@ public List<Club> getClubs(){
 			try {
 				
 				statement = connexion.createStatement() ; 
-				result = statement.executeQuery("SELECT id, content, eleve_id, eleve_nom, date from message where club_id = " + club.getId() +   " and datediff('"+ date + "',date) < 7 order by date desc;");
+				result = statement.executeQuery("SELECT id, content, eleve_id, eleve_nom, date from message where club_id = " + club.getId() +   " and datediff('"+ date + "',date) < 30 order by date desc;");
 				while(result.next()) {
 					Message message = new Message() ; 
-					String abc = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(result.getTimestamp("date")) ; 
+					String abc = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(result.getTimestamp("date")) ; 
 					message.setDate(abc);
 					message.setId(result.getInt("id"));
 					message.setContent(result.getString("content"));
 					message.setEleve_nom(result.getString("eleve_nom"));
 					message.setEleve_id(result.getInt("eleve_id"));
+					message.setClub(club) ; 
 					messages.add(message) ;
 				}
 				
@@ -1224,15 +1239,16 @@ public List<Club> getClubs(){
 			try {
 				
 				statement = connexion.createStatement() ; 
-				result = statement.executeQuery("SELECT id, content, eleve_id, eleve_nom, date from message where club_id = " + club.getId() +   " and datediff('"+ date + "',date) < 7 order by date desc;");
+				result = statement.executeQuery("SELECT id, content, eleve_id, eleve_nom, date from message where club_id = " + club.getId() +   " and datediff('"+ date + "',date) < 30 order by date desc;");
 				while(result.next()) {
 					Message message = new Message() ; 
-					String abc = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(result.getTimestamp("date")) ; 
+					String abc = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(result.getTimestamp("date")) ; 
 					message.setDate(abc);
 					message.setId(result.getInt("id"));
 					message.setContent(result.getString("content"));
 					message.setEleve_nom(result.getString("eleve_nom"));
 					message.setEleve_id(result.getInt("eleve_id"));
+					message.setClub(club) ; 
 					messages.add(message) ;
 				}
 				
@@ -1261,7 +1277,7 @@ public List<Club> getClubs(){
 			statement = connexion.createStatement() ;
 			java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
 			//System.out.println(date); 
-			result = statement.executeQuery("SELECT * FROM evenement where (type = 'Public' or ecole_id = "+ ecole_id + ")  order by datedebut asc ;");
+			result = statement.executeQuery("SELECT * FROM evenement where (type = 'Public' or ecole_id = "+ ecole_id + ") and datefin > '" + date + "' and datediff(datedebut, '"+ date + "') < 14  order by datedebut asc ;");
 			while(result.next()) {
 					Evenement evenement = new Evenement();
 					evenement.setValue(true);
@@ -1277,10 +1293,10 @@ public List<Club> getClubs(){
 						}
 					}
 					
-					String abc = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(result.getTimestamp("datedebut")) ; 
-					String abc2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(result.getTimestamp("datefin")) ; 
-					String abcd = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datedebut")) ;
-					String abcd2 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(result.getTimestamp("datefin")) ;
+					String abc = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(result.getTimestamp("datedebut")) ; 
+					String abc2 = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(result.getTimestamp("datefin")) ; 
+					String abcd = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datedebut")) ;
+					String abcd2 = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(result.getTimestamp("datefin")) ;
 					evenement.setId(result.getInt("id"));
 					evenement.setTitre(result.getString("titre"));
 					evenement.setDescription(result.getString("description"));
@@ -1311,6 +1327,108 @@ public List<Club> getClubs(){
 		
 		return evenements ;
 	}
+	
+	
+	public List<Eleve> getAllEleves(){
+		
+		loadDatabase() ; 
+		List<Eleve> eleves = new ArrayList<Eleve>() ; 
+
+		Statement statement = null ;
+		ResultSet result = null ; 
+		
+		try {
+			statement = connexion.createStatement() ; 
+			result = statement.executeQuery("SELECT * from eleve where id != 1 ; ");
+			while(result.next()) {
+				Eleve eleve = new Eleve() ; 
+				eleve = getEleveById(result.getInt("id")) ; 
+				eleves.add(eleve) ; 
+			}
+		}catch(SQLException e) {
+				System.out.println(e) ; 
+			}
+		
+		return eleves ; 
+		
+	}
+	
+	
+	public void ban(int id) {
+		loadDatabase() ;   
+		
+		try {
+			
+			PreparedStatement preparedStatement = connexion.prepareStatement("UPDATE eleve set validite = ? where id = " + id + " ;") ; 
+			preparedStatement.setString(1, "ban");
+			preparedStatement.executeUpdate() ; 
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e) ;
+		}finally {
+			
+			try {
+				connexion.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(); 
+			} 
+			
+		}
+	}
+	
+	public void unban(int id) {
+		loadDatabase() ;   
+		
+		try {
+			
+			PreparedStatement preparedStatement = connexion.prepareStatement("UPDATE eleve set validite = ? where id = " + id + " ;") ; 
+			preparedStatement.setString(1, "unban");
+			preparedStatement.executeUpdate() ; 
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e) ;
+		}finally {
+			
+			try {
+				connexion.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(); 
+			} 
+			
+		}
+	}
+	
+	
+public List<Eleve> getElevesInscris(int evenement_id){
+		
+		loadDatabase() ; 
+		List<Eleve> eleves = new ArrayList<Eleve>() ; 
+
+		Statement statement = null ;
+		ResultSet result = null ; 
+		
+		try {
+			statement = connexion.createStatement() ; 
+			result = statement.executeQuery("SELECT * from eleve where id in (select eleve_id from inscription where evenement_id = "+ evenement_id + ") ; ");
+			while(result.next()) {
+				Eleve eleve = new Eleve() ; 
+				eleve = getEleveById(result.getInt("id")) ; 
+				eleves.add(eleve) ; 
+			}
+		}catch(SQLException e) {
+				System.out.println(e) ; 
+			}
+		
+		return eleves ;
+}
+	
 	
 	
 

@@ -29,7 +29,7 @@
       </li>
       </c:if>
       <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="GestionEleve" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Clubs
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -43,7 +43,7 @@
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -73,7 +73,7 @@
   	</div>
   <div class="form-group">
   <label for="Description">Description</label>
-    <input type="text" class="form-control" id="InputDes" name = "description" placeholder="Entrez une description de votre club">
+    <textarea type="text" class="form-control" id="InputDes" name = "description" placeholder="Entrez une description de votre club"></textarea>
   </div>
   	
   	<div class="form-group">

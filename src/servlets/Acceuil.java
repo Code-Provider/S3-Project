@@ -54,7 +54,7 @@ public class Acceuil extends HttpServlet {
 				
 			request.setAttribute("ecoles", ListOList);
 			//System.out.println(count) ; 
-			this.getServletContext().getRequestDispatcher("/WEB-INF/Acceuil.jsp").forward(request, response);
+			this.getServletContext().getRequestDispatcher("/Acc.html").forward(request, response);
 		}
 	}
 

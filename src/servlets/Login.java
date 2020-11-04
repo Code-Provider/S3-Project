@@ -73,8 +73,8 @@ public class Login extends HttpServlet {
 			response.sendRedirect("/ProjetS3/Interface");
 		} 
 		else{
-			request.setAttribute("Error", "Informations érronés, veuillez réessayer") ;
-			response.sendRedirect("/ProjetS3/Login");
+			request.setAttribute("Error", "Identifiants érronés ou votre compte a été banni.") ;
+			this.getServletContext().getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
 		}
 	}
 

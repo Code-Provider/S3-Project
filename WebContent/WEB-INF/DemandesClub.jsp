@@ -48,7 +48,7 @@
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -95,11 +95,11 @@
   		</div>
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">
-                    <h4 class="card-title" style = "padding-left : 5px ; padding-top : 5px">${club.nom}</h4>
+                    <h4 class="card-title" style = "padding-left : 5px ; padding-top : 5px">${club.nom} [${club.ecole}]</h4>
                     <p class="card-text">${club.description}</p>
                     <div class = "btn-toolbar" style ="padding-top:5px">
                     <form method = "POST" action = "Demandes?club_id=${club.id}&bool=true">

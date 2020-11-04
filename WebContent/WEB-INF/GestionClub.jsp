@@ -53,7 +53,7 @@
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -197,6 +197,13 @@
   </div>
   <div class="tab-pane fade p-3" id="Demandes" aria-labelledby="Demandes-tab" role="tabpanel">
   <c:set var="count" value="1" scope="page"/>
+  <c:choose>
+    <c:when test="${empty demandes}">
+	<center>
+	<h5>Pas de nouvelles demandes.</h5>
+	</center>
+	</c:when>
+  <c:otherwise>
   <table class="table">
   <thead>
     <tr>
@@ -209,6 +216,7 @@
   </thead>
   <tbody>
     <c:forEach var = "eleve" items = "${demandes}">
+    
     <tr>
       <th scope="row"><c:out value = "${count}"/></th>
       <td>${eleve.nom}</td>
@@ -229,6 +237,9 @@
     
   </tbody>
 </table>
+</c:otherwise>
+</c:choose>
+
   </div>
   <div class="tab-pane fade p-3" id="Evenements" aria-labelledby="Evenements-tab" role="tabpanel">
   
@@ -239,9 +250,9 @@
   
   <c:forEach var = "ev" items = "${deck}">
   <div class="card" style="width: 12rem;">
-  <img src="${ev.image}" class="card-img-top" alt="...">
+  <img src="Im/${ev.image}" class="card-img-top" alt="...">
   <div class="card-body">
-    <h5 class="card-title">${ev.titre}</h5>
+    <h5 class="card-title">${ev.titre} [${ev.type}]</h5>
     <p class="card-text"><span style="white-space: pre-line">${ev.description}</span></p>
     <p class="card-text"><small class="text-muted">Du ${ev.dateDebut} au ${ev.dateFin}</small></p>
     <div class="btn-toolbar">
@@ -249,6 +260,17 @@
     <c:if test = "${value}">
     <a href="ModEvenement?club_id=${club_id}&gerant_id=${gerant.id}&nom=${club}&evenement_id=${ev.id}" class="btn btn-success" style = "margin-left:5px">Modifier</a>
     <form method = "POST" action = "DeleteEvenement?club_id=${club_id}&gerant_id=${gerant.id}&nom=${club}&evenement_id=${ev.id}">
+    <button type="submit" class="btn btn-danger" style = "margin-left:5px">Supprimer</button>
+    </form>
+    </c:if>
+    <c:if test = "${!evenement.ivalue}">
+    <form method = "POST" action = "Inscription?evenement_id=${evenement.id}&act=add&loc=evenement">
+    <button type="submit" class="btn btn-success" style = "margin-left:5px">S'inscrire</button>
+    </form>
+    </c:if>
+    <c:if test = "${evenement.club.gerant.id == sessionScope.id}">
+    <a href="ModEvenement?club_id=${evenement.club.id}&gerant_id=${evenement.club.gerant.id}&nom=${evenement.club.nom}&evenement_id=${evenement.id}" class="btn btn-info" style = "margin-left:5px">Modifier</a>
+    <form method = "POST" action = "DeleteEvenement?club_id=${club_id}&gerant_id=${evenement.club.gerant.id}&nom=${evenement.club.nom}&evenement_id=${evenement.id}">
     <button type="submit" class="btn btn-danger" style = "margin-left:5px">Supprimer</button>
     </form>
     </c:if>
@@ -280,13 +302,13 @@
   <div class="form-group row">
   <label for="example-datetime-local-input" class="col-2 col-form-label">Date début</label>
   <div class="col-10">
-    <input class="form-control" type="datetime-local" value="2020-01-20T13:45:00" id="example-datetime-local-input" name = "datedebut">
+    <input class="form-control" type="datetime-local" value="2020-02-07T00:00:00" id="example-datetime-local-input" name = "datedebut">
   </div>
 </div>
 <div class="form-group row">
   <label for="example-datetime-local-input" class="col-2 col-form-label">Date fin</label>
   <div class="col-10">
-    <input class="form-control" type="datetime-local" value="" id="example-datetime-local-input" name = "datefin">
+    <input class="form-control" type="datetime-local" value="2020-02-07T00:00:00" id="example-datetime-local-input" name = "datefin">
   </div>
 </div>
 <div class="form-group">
@@ -314,7 +336,6 @@
     <thead>
     <c:set var="count2" value="1" scope="page"/>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Nom</th>
       <th scope="col">Email</th>
       <th scope="col">Role</th>
@@ -325,7 +346,6 @@
     </thead>
     <tbody>
     <tr>
-      <th scope="row"><c:out value = "${count2}"/></th>
       <td>${gerant.nom}</td>
       <td>${gerant.email}</td>
       <td>Gérant</td>      
@@ -339,8 +359,8 @@
     </tr>
     <c:forEach var = "membre" items = "${membres}">
     <tr>
-      <th scope="row"><c:out value = "${count2}"/></th>
-      <c:set var="count" value="${count2 + 1}" scope="page"/>
+      
+
       <td>${membre.nom}</td>
       <td>${membre.email}</td>
       <td>Membre</td>

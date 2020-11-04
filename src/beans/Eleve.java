@@ -10,8 +10,17 @@ public class Eleve {
 	private String telephone ;
 	private String ecole ; 
 	private String date ; 
+	private String validite ; 
 	
 	
+	
+	
+	public String getValidite() {
+		return validite;
+	}
+	public void setValidite(String validite) {
+		this.validite = validite;
+	}
 	public String getDate() {
 		return date;
 	}

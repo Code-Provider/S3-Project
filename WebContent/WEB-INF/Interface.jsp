@@ -53,7 +53,7 @@ body {
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -120,7 +120,7 @@ body {
   
   <div class="card" style="width: 12rem;">
 
-  <img src="${ev.image}" class="card-img-top" alt="...">
+  <img src="Im/${ev.image}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">${ev.titre}</h5>
     
@@ -131,18 +131,18 @@ body {
     <div class="btn-toolbar">
     <a href="OneEvenement?evenement_id=${ev.id}" class="btn btn-primary">Détails</a>
     <c:if test = "${ev.ivalue}">
-    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=remove">
+    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=remove&loc=interface">
     <button type="submit" class="btn btn-warning" style = "margin-left:5px">Désinscrire</button>
     </form>
     </c:if>
     <c:if test = "${!ev.ivalue}">
-    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=add">
+    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=add&loc=interface">
     <button type="submit" class="btn btn-success" style = "margin-left:5px">S'inscrire</button>
     </form>
     </c:if>
     <c:if test = "${ev.club.gerant.id == sessionScope.id}">
     <a href="ModEvenement?club_id=${ev.club.id}&gerant_id=${ev.club.gerant.id}&nom=${ev.club.nom}&evenement_id=${ev.id}" class="btn btn-info" style = "margin-left:5px">Modifier</a>
-    <form method = "POST" action = "DeleteEvenement?club_id=${club_id}&gerant_id=${gerant.id}&nom=${club}&evenement_id=${ev.id}">
+    <form method = "POST" action = "DeleteEvenement?club_id=${ev.club.id}&gerant_id=${ev.club.gerant.id}&nom=${ev.club.nom}&evenement_id=${ev.id}">
     <button type="submit" class="btn btn-danger" style = "margin-left:5px">Supprimer</button>
     </form>
     </c:if>
@@ -172,7 +172,7 @@ body {
 			        	    </div>
 			        	    <div class="col-md-10">
 			        	        <p>
-			        	            <strong>${message.eleve_nom}</strong>
+			        	            <strong>${message.eleve_nom} [${message.club.nom }]</strong>
 			        	            <span class="float-right"><i class="text-warning fa fa-star"></i></span>
 			                        <span class="float-right"><i class="text-warning fa fa-star"></i></span>
 			        	            <span class="float-right"><i class="text-warning fa fa-star"></i></span>

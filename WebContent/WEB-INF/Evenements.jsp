@@ -53,7 +53,7 @@
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -85,9 +85,9 @@
   
   <div class="card" style="width: 12rem;">
 
-  <img src="${ev.image}" class="card-img-top" alt="...">
+  <img src="Im/${ev.image}" class="card-img-top" alt="...">
   <div class="card-body">
-    <h5 class="card-title text-center">${ev.titre}</h5>
+    <h5 class="card-title text-center">${ev.titre} [${ev.type}]</h5>
     
     <p class="card-text"><span style="white-space: pre-line">
     <span class = "text-center"><strong>Organisé par : ${ev.club.nom} ${ev.ecole.nom}</strong></span> <br> 
@@ -96,12 +96,12 @@
     <div class="btn-toolbar">
     <a href="OneEvenement?evenement_id=${ev.id}" class="btn btn-primary">Détails</a>
     <c:if test = "${ev.ivalue}">
-    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=remove">
+    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=remove&loc=evenements">
     <button type="submit" class="btn btn-warning" style = "margin-left:5px">Se désinscrire</button>
     </form>
     </c:if>
     <c:if test = "${!ev.ivalue}">
-    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=add">
+    <form method = "POST" action = "Inscription?evenement_id=${ev.id}&act=add&loc=evenements">
     <button type="submit" class="btn btn-success" style = "margin-left:5px">S'inscrire</button>
     </form>
     </c:if>

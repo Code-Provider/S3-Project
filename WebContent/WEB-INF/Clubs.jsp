@@ -9,7 +9,7 @@
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel = "stylesheet" href = "index.css">
-<title>Demandes clubs</title>
+<title>Clubs</title>
 <!-- <style>
 body {
   background-image: url('http://www.etudiant.ma/uploads/entrance_exam/cover/147/large_ENSIAS.jpg');
@@ -50,7 +50,7 @@ body {
       </li>
       <c:if test="${sessionScope.id == 1}">
       <li class="nav-item active">
-        <a class="nav-link" href="#" tabindex="-1">Utilisateurs</a>
+        <a class="nav-link" href="GestionEleve" tabindex="-1">Utilisateurs</a>
       </li>
       </c:if>
       
@@ -90,7 +90,7 @@ body {
   		</div>
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">
@@ -139,7 +139,7 @@ body {
   		</div>
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">
@@ -170,7 +170,7 @@ body {
   		</div>
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">
@@ -203,7 +203,7 @@ body {
   		</div>
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">
@@ -230,7 +230,7 @@ body {
   		</div>
         <div class="row no-gutters">
             <div class="col-auto">
-                <img src="${club.logo}" class="img-fluid" alt="">
+                <img src="Im/${club.logo}" class="img-fluid" alt="">
             </div>
             <div class="col">
                 <div class="card-block px-2">

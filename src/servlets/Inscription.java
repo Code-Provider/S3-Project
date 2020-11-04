@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bdd.Everything;
+import beans.Evenement;
 
 /**
  * Servlet implementation class Inscription
@@ -42,6 +43,7 @@ public class Inscription extends HttpServlet {
 	    Everything ev = new Everything() ; 
 	    int id = (int)session.getAttribute("id") ; 
 	    int evenement_id = Integer.parseInt(request.getParameter("evenement_id")) ;
+	    Evenement evenement = ev.getEvenement(evenement_id, id) ; 
 	    if (request.getParameter("act").equals("add")) {
 	    	ev.addIncription(id, evenement_id);
 	    }
@@ -49,7 +51,17 @@ public class Inscription extends HttpServlet {
 	    	ev.RemoveInscription(id, evenement_id);
 	    }
 	    
-	    response.sendRedirect("/ProjetS3/Evenements");
+	    if (request.getParameter("loc").equals("evenements")) {
+	    	response.sendRedirect("/ProjetS3/Evenements");
+	
+	    }else if (request.getParameter("loc").equals("interface")){
+	    	response.sendRedirect("/ProjetS3/Homepage") ; 
+	    }else if (request.getParameter("loc").equals("club")) {
+	    	response.sendRedirect("/ProjetS3/GestionClub?club_id=" + evenement.getClub().getId() + "&gerant_id=" + evenement.getClub() + "&nom="+ evenement.getClub().getNom()) ;
+	    }else if(request.getParameter("loc").equals("evenement")) {
+	    	response.sendRedirect("/ProjetS3/OneEvenement?evenement_id=" + evenement.getId());
+	    }
+	    
 	}
 
 }

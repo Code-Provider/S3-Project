@@ -82,7 +82,7 @@ public class Ecoles {
 		ResultSet result = null ; 
 		
 		try {
-			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projets3?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "thesteameuse") ;
+			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projets3?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root") ;
 			statement = connexion.createStatement() ; 
 			result = statement.executeQuery("SELECT nom, description, image FROM ECOLE");
 			
@@ -111,7 +111,7 @@ public class Ecoles {
 		}
 		
 		try {
-			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projets3?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "thesteameuse") ;
+			connexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/projets3?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root") ;
 		}
 		catch(SQLException e) {
 			System.out.println(e) ; 
@@ -154,8 +154,13 @@ public class Ecoles {
 		
 		
 		try {
-			PreparedStatement preparedStatement = connexion.prepareStatement("DELETE FROM ECOLE WHERE id = " +  id + " ; ");
+			PreparedStatement preparedStatement0 = connexion.prepareStatement("DELETE FROM CLUB WHERE ecole_id = " +  id + " ; ");
+		    preparedStatement0 = connexion.prepareStatement("DELETE FROM ELEVE WHERE id != 1 and ecole_id = " +  id + " ; ");
+		    preparedStatement0.executeUpdate() ; 
+			PreparedStatement preparedStatement = connexion.prepareStatement("DELETE FROM CLUB WHERE ecole_id = " +  id + " ; ");
 			preparedStatement.executeUpdate() ; 
+			PreparedStatement preparedStatement2 = connexion.prepareStatement("DELETE FROM ECOLE WHERE id = " +  id + " ; ");
+			preparedStatement2.executeUpdate() ; 
 
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block

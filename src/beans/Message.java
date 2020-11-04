@@ -8,11 +8,20 @@ public class Message {
 	private int club_id ; 
 	private String eleve_nom ;
 	private String date ; 
+	private Club club ;
 	
 	
 	
 	
 	
+	
+	
+	public Club getClub() {
+		return club;
+	}
+	public void setClub(Club club) {
+		this.club = club;
+	}
 	public String getDate() {
 		return date;
 	}
